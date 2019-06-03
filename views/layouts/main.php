@@ -39,8 +39,10 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'Asignar usuario a evento', 'url' => ['/site/create']],
+            ['label' => 'Eventos', 'url' => ['/event/index']],
+            ['label' => 'Asistentes', 'url' => ['/assistant/index']],
+            ['label' => 'Tipos de evento', 'url' => ['/tipo/index']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (

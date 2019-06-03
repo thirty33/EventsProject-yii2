@@ -9,6 +9,10 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\CreateEvent;
+use app\models\Event;
+use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 
 class SiteController extends Controller
 {
@@ -61,7 +65,20 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $query  = CreateEvent::find()
+            ->joinWith(['event', 'assistant', 'tipo'])
+            ->all();
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'sort' => [
+                'attributes' => ['id', 'name'],
+            ],
+        ]);
+        return $this->render('index', ['listDataProvider' => $dataProvider]);
     }
 
     /**
@@ -124,5 +141,24 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    /**
+     * Creates a new CreateEvent model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate()
+    {
+        $model = new CreateEvent();
+        // echo 'is entering in function';
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            // return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 }
